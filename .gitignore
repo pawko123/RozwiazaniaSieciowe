@@ -1,0 +1,36 @@
+# --- Pliki wykonywalne i binarne ---
+# Kompilowane pliki binarne (z ignorowaniem rozszerzeń w zależności od OS)
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Ignoruj konkretny plik wykonywalny projektu (jeśli kompilujesz go do głównego katalogu)
+# Zmień "nazwa-twojej-aplikacji" na nazwę swojego projektu
+/nazwa-twojej-aplikacji
+
+# --- Pliki testowe i pokrycie kodu ---
+*.test
+*.out
+/coverage.txt
+
+# --- Zależności i narzędzia ---
+# Katalog vendor jest ignorowany, jeśli używasz Go Modules (zalecane).
+# Jeśli celowo chcesz przechowywać zależności w repozytorium, usuń poniższą linijkę.
+vendor/
+
+# --- Narzędzia deweloperskie i IDE ---
+# Pliki konfiguracyjne popularnych edytorów (VS Code, GoLand)
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# --- Zmienne środowiskowe ---
+# Pliki zawierające tajne klucze i konfigurację lokalną
+.env
+.env.local
