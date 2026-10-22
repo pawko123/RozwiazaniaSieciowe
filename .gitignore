@@ -9,6 +9,7 @@
 # Ignoruj konkretny plik wykonywalny projektu (jeśli kompilujesz go do głównego katalogu)
 # Zmień "nazwa-twojej-aplikacji" na nazwę swojego projektu
 /nazwa-twojej-aplikacji
+bin/
 
 # --- Pliki testowe i pokrycie kodu ---
 *.test
