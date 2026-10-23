@@ -13,11 +13,11 @@ type Response struct {
 	Contents string
 }
 
-func (r Response) String() string {
-	if r.NrID == "" {
-		return fmt.Sprintf("key_out-{:%s};", r.Contents)
+func (response *Response) String() string {
+	if response.NrID == "" {
+		return fmt.Sprintf("key_out-{:%s};", response.Contents)
 	}
-	return fmt.Sprintf("key_out-{%s : %s};", r.NrID, r.Contents)
+	return fmt.Sprintf("key_out-{%s : %s};", response.NrID, response.Contents)
 }
 
 func ParseResponse(raw string) (*Response, error) {

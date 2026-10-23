@@ -17,12 +17,12 @@ type Request struct {
 	Password string
 }
 
-func (r Request) String() string {
-	switch r.Command {
+func (request *Request) String() string {
+	switch request.Command {
 	case CmdGet:
-		return fmt.Sprintf("key_in-get { %s };", r.NrID)
+		return fmt.Sprintf("key_in-get { %s };", request.NrID)
 	case CmdSet:
-		return fmt.Sprintf("key_in-set { %s : %s };", r.Password, r.NrID)
+		return fmt.Sprintf("key_in-set { %s : %s };", request.Password, request.NrID)
 	default:
 		return ""
 	}

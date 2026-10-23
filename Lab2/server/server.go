@@ -48,14 +48,12 @@ func (server *Server) Start() error {
 		}
 
 		server.wg.Add(1)
-		go func(c net.Conn) {
-			defer server.wg.Done()
-			server.handleConn(c)
-		}(conn)
+		go server.handleConn(conn)
 	}
 }
 
 func (server *Server) handleConn(conn net.Conn) {
+	defer server.wg.Done()
 	defer conn.Close()
 	remoteAddr := conn.RemoteAddr().String()
 	log.Printf("[POŁĄCZENIE] Nowy klient połączony: %s", remoteAddr)

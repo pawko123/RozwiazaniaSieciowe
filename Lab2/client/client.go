@@ -29,7 +29,7 @@ func NewClient(addr string) *Client {
 }
 
 func (client *Client) CheckKey(id string) (bool, error) {
-	req := protocol.Request{
+	req := &protocol.Request{
 		Command: protocol.CmdGet,
 		NrID:    id,
 	}
@@ -50,7 +50,7 @@ func (client *Client) CheckKey(id string) (bool, error) {
 }
 
 func (client *Client) AddKey(password, id string) (bool, error) {
-	req := protocol.Request{
+	req := &protocol.Request{
 		Command:  protocol.CmdSet,
 		Password: password,
 		NrID:     id,
