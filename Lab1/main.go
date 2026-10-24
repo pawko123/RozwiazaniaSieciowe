@@ -91,7 +91,7 @@ func main() {
 		return
 	}
 
-	for _, m := range output {
-		fmt.Println(m)
+	for _, match := range output {
+		fmt.Println(match)
 	}
 }

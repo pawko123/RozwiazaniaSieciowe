@@ -24,15 +24,13 @@ func NewMatchRetrievalService(url string) *MatchRetrievalService {
 
 var seasonYearRegex = regexp.MustCompile(`(\d{4})/(\d{4})`)
 
-// FetchSchedule downloads the page stream, parses XPath, and builds the team map
-func (s *MatchRetrievalService) FetchSchedule() (map[string]*models.Team, error) {
-	resp, err := http.Get(s.url)
+func (service *MatchRetrievalService) FetchSchedule() (map[string]*models.Team, error) {
+	resp, err := http.Get(service.url)
 	if err != nil {
 		return nil, fmt.Errorf("network error: %w", err)
 	}
 	defer resp.Body.Close()
 
-	// Parse directly from io.Reader stream
 	doc, err := htmlquery.Parse(resp.Body)
 	if err != nil {
 		return nil, fmt.Errorf("xpath/dom parse error: %w", err)
@@ -49,10 +47,10 @@ func (s *MatchRetrievalService) FetchSchedule() (map[string]*models.Team, error)
 	}
 
 	seasonNode := htmlquery.FindOne(doc, "//h2")
-	matches := seasonYearRegex.FindStringSubmatch(htmlquery.InnerText(seasonNode))
+	seasonYearValue := seasonYearRegex.FindStringSubmatch(htmlquery.InnerText(seasonNode))
 
-	startYear, _ := strconv.Atoi(matches[1])
-	endYear, _ := strconv.Atoi(matches[2])
+	startYear, _ := strconv.Atoi(seasonYearValue[1])
+	endYear, _ := strconv.Atoi(seasonYearValue[2])
 
 	rows := htmlquery.Find(doc, "//table//tbody/tr")
 	for _, row := range rows {
@@ -70,8 +68,8 @@ func (s *MatchRetrievalService) FetchSchedule() (map[string]*models.Team, error)
 		dateStr := strings.TrimSpace(htmlquery.InnerText(dateNode))
 		timeStr := strings.TrimSpace(htmlquery.InnerText(timeNode))
 
-		matchDate := s.parseDate(dateStr, timeStr, startYear, endYear)
-		hostPts, guestPts := s.parseScore(row)
+		matchDate := service.parseDate(dateStr, timeStr, startYear, endYear)
+		hostPts, guestPts := service.parseScore(row)
 
 		hTeam := getOrCreateTeam(hostName)
 		gTeam := getOrCreateTeam(guestName)
@@ -91,7 +89,7 @@ func (s *MatchRetrievalService) FetchSchedule() (map[string]*models.Team, error)
 	return teams, nil
 }
 
-func (s *MatchRetrievalService) parseDate(datePart, timePart string, startYear, endYear int) time.Time {
+func (service *MatchRetrievalService) parseDate(datePart, timePart string, startYear, endYear int) time.Time {
 	var day, month, hour, minute int
 	fmt.Sscanf(datePart, "%d.%d", &day, &month)
 	fmt.Sscanf(timePart, "%d:%d", &hour, &minute)
@@ -104,7 +102,7 @@ func (s *MatchRetrievalService) parseDate(datePart, timePart string, startYear, 
 	return time.Date(year, time.Month(month), day, hour, minute, 0, 0, time.Local)
 }
 
-func (s *MatchRetrievalService) parseScore(row *html.Node) (int, int) {
+func (service *MatchRetrievalService) parseScore(row *html.Node) (int, int) {
 	scoreNode := htmlquery.FindOne(row, "./td[5]")
 	if scoreNode == nil {
 		return 0, 0
