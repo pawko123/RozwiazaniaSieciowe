@@ -35,3 +35,6 @@ vendor/
 # Pliki zawierające tajne klucze i konfigurację lokalną
 .env
 .env.local
+
+# Lokalne bazy SQLite
+*.db
